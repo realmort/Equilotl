@@ -110,7 +110,6 @@ func ParseDiscord(p, _ string) *DiscordInstall {
 		}
 
 		if appPath == "" {
-			Log.Warn("Tried to parse invalid Location:", p)
 			return nil
 		}
 
