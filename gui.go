@@ -306,7 +306,7 @@ func RawInfoModal(id, title, description string, isOpenAsar bool) g.Widget {
 				g.SetNextWindowSize(float32(wi)*0.8, 0)
 			}),
 			g.PopupModal(id).
-				Flags(g.WindowFlagsNoTitleBar | g.WindowFlagsNoResize | g.WindowFlagsNoMove | Ternary(isDynamic, g.WindowFlagsAlwaysAutoResize, 0)).
+				Flags(g.WindowFlagsNoTitleBar|g.WindowFlagsNoResize|g.WindowFlagsNoMove|Ternary(isDynamic, g.WindowFlagsAlwaysAutoResize, 0)).
 				Layout(
 					g.Align(g.AlignCenter).To(
 						g.Style().SetFontSize(30).To(
@@ -366,7 +366,7 @@ func UpdateModal() g.Widget {
 				g.SetNextWindowSize(float32(wi)*0.8, 0)
 			}),
 			g.PopupModal("#update-prompt").
-				Flags(g.WindowFlagsNoTitleBar | g.WindowFlagsNoResize | g.WindowFlagsNoMove | g.WindowFlagsAlwaysAutoResize).
+				Flags(g.WindowFlagsNoTitleBar|g.WindowFlagsNoResize|g.WindowFlagsNoMove|g.WindowFlagsAlwaysAutoResize).
 				Layout(
 					g.Align(g.AlignCenter).To(
 						g.Style().SetFontSize(30).To(
