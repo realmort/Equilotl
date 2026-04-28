@@ -74,7 +74,7 @@ func main() {
 
 	if *versionFlag {
 		fmt.Println("Equilotl Cli", buildinfo.InstallerTag, "("+buildinfo.InstallerGitHash+")")
-		fmt.Println("Copyright (C) 2025 Vendicated and Vencord contributors")
+		fmt.Println("Copyright (C) 2026 Vendicated, thororen1234, Vencord, and Equicord")
 		fmt.Println("License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.")
 		return
 	}
