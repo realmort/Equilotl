@@ -9,9 +9,11 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"runtime"
 	"strings"
@@ -20,6 +22,14 @@ import (
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 )
+
+type noBellWriter struct{ w io.WriteCloser }
+
+func (n *noBellWriter) Write(p []byte) (int, error) {
+	return n.w.Write(bytes.ReplaceAll(p, []byte{0x07}, nil))
+}
+
+func (n *noBellWriter) Close() error { return n.w.Close() }
 
 var discords []any
 var interactive = false
@@ -118,8 +128,9 @@ func main() {
 			"Quit",
 		}
 		_, choice, err := (&promptui.Select{
-			Label: "What would you like to do? (Press Enter to confirm)",
-			Items: choices,
+			Label:  "What would you like to do? (Press Enter to confirm)",
+			Items:  choices,
+			Stdout: &noBellWriter{os.Stdout},
 		}).Run()
 		handlePromptError(err)
 
@@ -246,8 +257,9 @@ func PromptDiscord(action, dir, branch string) *DiscordInstall {
 	items = append(items, "Custom Location")
 
 	_, choice, err := (&promptui.Select{
-		Label: "Select Discord install to " + action + " (Press Enter to confirm)",
-		Items: items,
+		Label:  "Select Discord install to " + action + " (Press Enter to confirm)",
+		Items:  items,
+		Stdout: &noBellWriter{os.Stdout},
 	}).Run()
 	handlePromptError(err)
 
@@ -257,7 +269,8 @@ func PromptDiscord(action, dir, branch string) *DiscordInstall {
 
 	for {
 		custom, err := (&promptui.Prompt{
-			Label: "Custom Discord Location",
+			Label:  "Custom Discord Location",
+			Stdout: &noBellWriter{os.Stdout},
 		}).Run()
 		handlePromptError(err)
 
