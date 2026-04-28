@@ -245,18 +245,24 @@ jobs:
           name: Equilotl-windows
           path: windows
 
-      - name: Edit and upload release
+      - name: Delete existing release
+        run: gh release delete "${{ github.ref_name }}" --yes || true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PREV_TAG=$(git tag --sort=-version:refname | grep -v "^${{ github.ref_name }}$" | head -1)
-          NOTES=$(printf "This is release ${{ github.ref_name }} of Equilotl.\n\n\n**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ github.ref_name }}")
-          gh release edit ${{ github.ref_name }} \
-            --title "${{ github.ref_name }}" \
-            --notes "$NOTES"
-          gh release upload ${{ github.ref_name }} \
-            linux/Equilotl-x11 \
-            linux/EquilotlCli-linux \
-            macos/Equilotl.MacOS.zip \
-            windows/Equilotl.exe \
-            windows/EquilotlCli.exe
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
+          make_latest: ${{ !contains(github.ref_name, '-') }}
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          draft: false
+          body: |
+            This is release ${{ github.ref_name }} of Equilotl.
+          files: |
+            linux/Equilotl-x11
+            linux/EquilotlCli-linux
+            macos/Equilotl.MacOS.zip
+            windows/Equilotl*.exe
