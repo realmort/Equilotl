@@ -437,12 +437,9 @@ func renderInstaller() g.Widget {
 	}
 
 	var warningHeight float32 = 90
-	if runtime.GOOS == "darwin" {
-		warningHeight = 130
-	}
-
 	var baseFontSize float32 = 30
 	if runtime.GOOS == "darwin" {
+		warningHeight = 130
 		baseFontSize = 20
 	}
 
