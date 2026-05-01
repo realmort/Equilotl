@@ -71,7 +71,6 @@ func main() {
 	}
 
 	win = g.NewMasterWindow("Equilotl", 1200, 800, linuxFlags)
-	win.SetSizeLimits(1200, 800, -1, -1)
 
 	go func() {
 		<-GithubDoneChan
@@ -115,7 +114,9 @@ func getChosenInstall() *DiscordInstall {
 			g.OpenPopup("#invalid-custom-location")
 		}
 	} else {
-		choice = discords[radioIdx].(*DiscordInstall)
+		if radioIdx >= 0 && radioIdx < len(discords) {
+			choice = discords[radioIdx].(*DiscordInstall)
+		}
 	}
 	return choice
 }
@@ -303,7 +304,11 @@ func RawInfoModal(id, title, description string, isOpenAsar bool) g.Widget {
 		To(
 			g.Custom(func() {
 				wi, _ := win.GetSize()
-				g.SetNextWindowSize(float32(wi)*0.8, 0)
+				modalW := float32(wi) * 0.8
+				if modalW < 300 {
+					modalW = 300
+				}
+				g.SetNextWindowSize(modalW, 0)
 			}),
 			g.PopupModal(id).
 				Flags(g.WindowFlagsNoTitleBar|g.WindowFlagsNoResize|g.WindowFlagsNoMove|Ternary(isDynamic, g.WindowFlagsAlwaysAutoResize, 0)).
@@ -424,9 +429,12 @@ func renderInstaller() g.Widget {
 		w = 200
 	}
 	btnWidth := (w - 40) / 4
+	if btnWidth < 1 {
+		btnWidth = 1
+	}
 
 	var currentDiscord *DiscordInstall
-	if radioIdx != customChoiceIdx {
+	if radioIdx != customChoiceIdx && radioIdx >= 0 && radioIdx < len(discords) {
 		currentDiscord = discords[radioIdx].(*DiscordInstall)
 	}
 	var isOpenAsar = currentDiscord != nil && currentDiscord.IsOpenAsar()
