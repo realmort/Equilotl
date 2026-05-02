@@ -1,9 +1,3 @@
-/*
- * SPDX-License-Identifier: GPL-3.0
- * Vencord Installer, a cross platform gui/cli app for installing Vencord
- * Copyright (c) 2023 Vendicated and Vencord contributors
- */
-
 package main
 
 import (
@@ -11,12 +5,16 @@ import (
 	"image/color"
 )
 
-const ReleaseUrl = "https://api.github.com/repos/Equicord/Equicord/releases/latest"
-const ReleaseUrlFallback = "https://equicord.org/releases/equicord"
+
+const ReleaseUrl = "https://api.github.com/repos/realmort/Equicord-devbuild/contents/"
+const ReleaseUrlFallback = ""
+
+
 const InstallerReleaseUrl = "https://api.github.com/repos/Equicord/Equilotl/releases/latest"
 const InstallerReleaseUrlFallback = "https://equicord.org/releases/equilotl"
 
 var UserAgent = "Equilotl/" + buildinfo.InstallerGitHash + " (https://github.com/Equicord/Equilotl)"
+
 
 var (
 	DiscordGreen  = color.RGBA{R: 0x2D, G: 0x7C, B: 0x46, A: 0xFF}
@@ -24,6 +22,7 @@ var (
 	DiscordBlue   = color.RGBA{R: 0x58, G: 0x65, B: 0xF2, A: 0xFF}
 	DiscordYellow = color.RGBA{R: 0xfe, G: 0xe7, B: 0x5c, A: 0xff}
 )
+
 
 var LinuxDiscordNames = []string{
 	"Discord",
@@ -37,7 +36,6 @@ var LinuxDiscordNames = []string{
 	"discord-ptb",
 	"discord-canary",
 	"discord-development",
-	// Flatpak
 	"com.discordapp.Discord",
 	"com.discordapp.DiscordPTB",
 	"com.discordapp.DiscordCanary",
