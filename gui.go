@@ -424,10 +424,15 @@ func ShowModal(title, desc string) {
 func renderInstaller() g.Widget {
 	candidates := makeAutoComplete()
 	wi, _ := win.GetSize()
+	if wi < 96 {
+		wi = 96
+	}
+
 	w := float32(wi) - 96
 	if w < 200 {
 		w = 200
 	}
+
 	btnWidth := (w - 40) / 4
 	if btnWidth < 1 {
 		btnWidth = 1
