@@ -129,8 +129,19 @@ jobs:
           mv Equilotl Equilotl.app/Contents/MacOS/Equilotl
           cp macos/icon.icns Equilotl.app/Contents/Resources/icon.icns
 
+      - name: Check if signing certificate is available
+        id: check_cert
+        env:
+          CERT_AVAILABLE: ${{ secrets.APPLE_SIGNING_CERT }}
+        run: |
+          if [ -n "$CERT_AVAILABLE" ]; then
+            echo "has_cert=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_cert=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Import signing certificate
-        if: ${{ secrets.APPLE_SIGNING_CERT != '' }}
+        if: steps.check_cert.outputs.has_cert == 'true'
         env:
           CSC_LINK: ${{ secrets.APPLE_SIGNING_CERT }}
           CSC_KEY_PASSWORD: ${{ secrets.APPLE_SIGNING_CERT_PASSWORD }}
@@ -144,13 +155,13 @@ jobs:
           rm certificate.p12
 
       - name: Sign the app
-        if: ${{ secrets.APPLE_SIGNING_CERT != '' }}
+        if: steps.check_cert.outputs.has_cert == 'true'
         run: |
           codesign --force --options runtime --sign "Developer ID Application" Equilotl.app/Contents/MacOS/Equilotl
           codesign --force --options runtime --sign "Developer ID Application" Equilotl.app
 
       - name: Notarize the app
-        if: ${{ secrets.APPLE_SIGNING_CERT != '' }}
+        if: steps.check_cert.outputs.has_cert == 'true'
         env:
           API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
